@@ -1,0 +1,37 @@
+%inputmix {
+    vertical-align: middle;
+    height: 20px;
+    padding: 3px;
+    display: inline-block;
+    width: 30%;
+}
+.inputGroup {
+    width: 100%;
+    margin-bottom: 10px;
+    label {
+        vertical-align: middle;
+        margin-right: 1%;
+        width: 10%;
+        display: inline-block;
+        overflow-x: show;
+    }
+    input {
+        @extend %inputmix;
+    }
+    input[type=checkbox], input[type=radio] {
+        width: 5%;
+    }
+    select {
+        @extend %inputmix;
+        height: 28px;
+    }
+    textarea {
+        display: block;
+        overflow: none;
+    }
+    &.block {
+        label, input, select, textarea {
+            display: block;
+        }
+    }
+}

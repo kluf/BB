@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title><%= title %></title>
+    <link href="http://localhost:3000/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="http://localhost:3000/js/main.js"></script>
+</head>
+<body>
+<div class="wrapper">
+    <% include menu %>
+    <% if(page == 'newpost') { %>
+    <div class="row">
+    <div class="span span-10">
+        <% include newPost %>
+    </div>
+    </div>
+    <% } %>
+    <div class="row">
+        <div class="span span-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia explicabo labore culpa voluptatem laborum odit dolores aperiam? Eveniet repellat excepturi maiores. Molestias tempora ut repellat dolores, ipsa nam accusantium! Quos.</div>
+        <div class="span span-6">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis aperiam nobis debitis cumque perspiciatis atque rerum, voluptatem magnam doloremque? Laborum perferendis praesentium animi deleniti minus distinctio, quos vitae, aperiam temporibus.</div>
+        <div class="span span-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia explicabo labore culpa voluptatem laborum odit dolores aperiam? Eveniet repellat excepturi maiores. Molestias tempora ut repellat dolores, ipsa nam accusantium! Quos.</div>
+    </div>
+    <div id="root_footer"></div>
+</div>
+<% include footer %>
+</body>
+</html>

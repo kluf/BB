@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Learning Angular</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+    <script type="text/javascript" src="app.js"></script>
+    <script type="text/javascript" src="maincontroller.js"></script>
+</head>
+<body>
+    <div id="connect" ng-app="MyTutorial" ng-controller="MainController">{{understand}}
+        <input type="text" ng-model="inputValue"/>{{inputValue}}<br>
+        <select ng-model='SelectedPerson' ng-options='obj.name for obj in people'></select>
+        <select ng-model='SelectedGenre'>
+            <option ng-repeat='label in people[SelectedPerson.id].music'>{{label}}</option>
+        </select>
+        <br>
+        <label for="searchPeople">Type a person's name</label><input type="text" ng-model="searchText" id="searchPeople">
+        <ul>
+            <li ng-repeat="person in people | filter:searchText">#{{person.id}} {{person.name}}</li>
+        </ul><br>
+        <label for="searchPeople1">Hiding peoples</label><input type="text" ng-model="searchText1" id="searchPeople1">
+        <ul>
+            <li ng-repeat="person in people | filter:searchText1" ng-show="person.live == true">#{{person.id}} {{person.name}}</li>
+        </ul>
+        <ul>
+            <li ng-repeat="person in people | filter:searchText1" ng-hide="person.live == false">#{{person.id}} {{person.name}}</li>
+        </ul><br>
+        <label for="newPerson">Hiding peoples</label><input type="text" ng-model="newPerson" id="newPerson">
+        <button ng-click="addNew()">Add new person</button>
+    </div>
+</body>
+</html>

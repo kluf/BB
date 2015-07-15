@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<style type="text/css">
+    table, tr, td {
+        border: 1px solid #efc;
+    }
+    tr {
+        height: 50px;
+    }
+    p, label, input, textarea {
+        font: 0.9em/1.5 Calibri, Verdana;
+    }
+    form {
+        border: 1px dotted #eec;
+    }
+</style>
+<head>
+    <title>Index page</title>
+</head>
+<body>
+<% if (posts) %>
+    <table>
+    <tr><td>Date</td>
+        <td>Hours</td>
+        <td>Description</td>
+        <td>Archive</td>
+        <td>Update</td>
+        <td>Delete</td>
+        <td>Image</td>
+    </tr>
+    <% for(var i = 0; i < posts.length; i += 1) { %>
+    <tbody>
+        <tr>
+            <td><%= posts[i].date %></td>
+            <td><%= posts[i].hours %></td>
+            <td><%= posts[i].description %></td>
+            <td><% if (!posts[i].archived) %>
+                <a href='/archive/<%= posts[i].id%>'>Archive</a>
+            </td>
+            <td><a href='/update/<%= posts[i].id%>'>Update</a></td>
+            <td><a href='/delete/<%= posts[i].id%>'>Delete</a></td>
+            <td>
+                <% if (posts[i].name) { %>
+                <img src=<%= posts[i].name %> height="auto" width="100%">
+                <% } %>
+            </td>
+        </tr>
+    </tbody>
+    <% } %>
+    </table>
+<form method="POST" action="/">
+    <p>Date (YYYY-MM-DD):<br/><input name="date" type="text"><p/>
+    <p>Hours worked:<br/><input name="hours" type="text"><p/>
+    <p>Description:<br/>
+    <textarea name="description"></textarea></p>
+    <input type="submit" value="Add" />
+    <% if (err) { %>
+    <div class='error'><%= err %></div>
+    <% } %>
+</form>
+</body>
+</html>

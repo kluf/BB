@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>dashboard</title>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+</head>
+<body>
+    <div id="main"></div>
+    <script src="/underscore.js"></script>
+    <script src="/jquery.js"></script>
+    <script src="/backbone.js"></script>
+    <script src="/templates.js"></script>
+    <script src="/views.js"></script>
+    <script src="/models.js"></script>
+    <script src="/moment.js"></script>
+    <script src="/router.js"></script>
+    <script src="/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        var r = new AppRouter({
+            main: $('#main'),
+            events: new Events(<%- events %>)
+        });
+        Backbone.history.start({pushState: true});
+    </script>
+</body>
+</html>

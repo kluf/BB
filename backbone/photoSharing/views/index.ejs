@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Photo sharing</title>
+    <link rel="stylesheet" type="text/css" href="/style/main.css">
+</head>
+<body>
+    <div id="main"></div>
+    <script>var USER = <%- user %>;</script>
+    <script type="text/template" id="commentView">
+        <p><strong>{{username}}</strong> said</p>
+        <p>{{text}}</p>
+        <hr>
+    </script>
+    <script type="text/template" id="photoPageView">
+        <img src="{{path}}"/>
+        <p> {{caption}} <small> by {{username}}</small></p>
+        <div>
+        <textarea id="commentText"></textarea><br />
+        <button> Comment </button>
+        </div>
+        <ul></ul>
+    </script>
+    <script type="text/template" id="userView">
+        <h1>{{username}}</h1>
+        <ul></ul>
+    </script>
+    <script type="text/template" id="photoView">
+        <a href="/photo/{{id}}"><img src={{path}}></a>
+    </script>
+    <script type="text/template" id="addPhotoView">
+        <p>Photo: <input type="file" id="imageUpload" /></p>
+        <p>Caption: <input type="text" id="imageCaption" /></p>
+        <button> Upload </button>
+    </script>
+    <script type="text/template" id="navView">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/users">All Users</a></li>
+            <li><a href="/users/{{id}}">My Profile</a></li>
+            <li><a href="/upload">Add Photo</a></li>
+            <li>Logged in as <strong>{{username}}</strong></li>
+            <li><a href="/logout">Log out</a></li>
+        </ul>
+        <hr/>
+    </script>
+    <script type="text/template" id="photosView">
+        <a href="/photo/{{id}}"><img src="{{path}}"></a>
+    </script>
+    <script src="/underscore.js"></script>
+    <script src="/jquery.js"></script>
+    <script src="/backbone.js"></script>
+    <script src="/app.js"></script>
+    <script type="text/javascript">
+        var r = new AppRouter({
+            main: $('#main'),
+            userPhotos: new Photos(<%- userPhotos %>),
+            followingPhotos: new Photos(<%- followingPhotos %>)
+        });
+        // Backbone.history.start({pushState: true});
+    </script>
+</body>
+</html>

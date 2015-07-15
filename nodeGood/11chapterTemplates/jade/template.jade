@@ -1,0 +1,28 @@
+-if (messages) {
+    -messages.forEach(function(message) {
+        p=message
+    -})
+-}
+
+-if (messages) {
+    each message in messages
+        p=message
+-}
+
+-if (obj) {
+    each val, key in obj
+        p=val
+        strong=key
+        script
+            alert('yes')
+-}
+-if (messages) {
+    case messages.length
+        when 0
+            p No results
+        when 1
+            p=messages[0]
+        default
+            each message in messages
+                p=message
+-}

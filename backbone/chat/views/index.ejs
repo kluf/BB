@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple blog</title>
+</head>
+<body>
+    <script type='text/template' id='user'>
+      {{ name }}x
+    </script>
+    <script type='text/template' id='form'>
+        <input type='text' placeholder='{{placeholder}}' />
+        <button> {{button}} </button>
+    </script>
+    <script type='text/template' id='appLayout'>
+      <div id='users'></div>
+      <div id='conversation'></div>
+      <div id='rooms'></div>
+      <div id='controls'></div>
+    </script>
+    <div id="main"></div>
+    <script src="/underscore.js"></script>
+    <script src="/jquery.js"></script>
+    <script src="/backbone.js"></script>
+    <script src="/backbone.babysitter.js"></script>
+    <script src="/backbone.wreqr.js"></script>
+    <script src="/backbone.marionette.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/app.js"></script>
+    <script src="/socket.js"></script>
+    <script src="/users.js"></script>
+    <script src='/layout.js'></script>
+    <script src='/router.js'></script>
+</body>
+</html>

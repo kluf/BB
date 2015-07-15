@@ -1,0 +1,8 @@
+npm init
+npm install -g browserify
+browserify -r ./app/main:app > ./static/bundle.js
+browserify -r ./app/main:app -o ./static/bundle.js
+-------------
+stitch
+-------------
+npm install stitch

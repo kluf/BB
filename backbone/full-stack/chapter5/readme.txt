@@ -1,0 +1,1 @@
+browserify ./app/main > ./static/bundle.js

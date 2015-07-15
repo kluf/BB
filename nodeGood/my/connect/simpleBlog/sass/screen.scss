@@ -1,0 +1,138 @@
+/* Welcome to Compass.
+ * In this file you should write your main styles. (or centralize your imports)
+ * Import this file using the following HTML or equivalent:
+ * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
+
+// colors
+
+$backgroundLight: #e8f2f2;
+$backgroundNormal: #bce1eb;
+$text-normal: #2e2b2b;
+$normal: #65b2d6;
+$normal-darker: #182e7a;
+$backgroundOther: #e8d1ae;
+$white: #fff;
+$black: #000;
+
+@import "sprites.scss";
+@import "buttons.scss";
+@import "compass";
+@import "grid.scss";
+@import "forms.scss";
+
+@mixin paddingmy($top: 0, $left: 0, $bottom: 0, $right: 0) {
+    padding: $top $left $bottom $right;
+}
+
+@import "compass/reset";
+@import "compass/css3/font-face";
+@import "compass/typography/lists/horizontal-list";
+@import "compass/layout/sticky-footer";
+@import "compass/typography/links/link-colors";
+
+@include font-face("Hatori hanzo", font-files("hattori_hanzo-webfont.eot", "hattori_hanzo-webfont.ttf", "hattori_hanzo-webfont.woff", "hattori_hanzo-webfont.woff2"));
+@include sticky-footer(40px, '.wrapper', '#root_footer', '#footer');
+
+body * {
+    font: 1em/1 "Hatori hanzo", sans-serif;
+}
+
+p, span, div, input, textarea, select option {
+    color: $text-normal;
+}
+
+a {@include link-colors($text-normal, $normal-darker, $normal); text-decoration: none;}
+
+input, textarea, select {
+    border-radius: 2px;
+    border: 1px solid $backgroundNormal;
+    &:hover, &:active, &:focus {
+        border-color: $normal;
+        @include box-shadow($normal 0 0 3px, $normal 0 0 3px inset);
+    }
+}
+
+.logo {
+    width: 100%;
+    height: auto;
+}
+
+.menu {
+    @include horizontal-list(3%);
+    @include paddingmy(1%, 2%, 1%, 2%);
+    border-bottom: 7px solid $normal;
+    background-color: $backgroundLight;
+    height: 110px;
+    li:first-child {
+        height: 100%;
+        width: 300px;
+    }
+}
+.pagination {
+    text-align: center;
+    li {
+        display: inline;
+        padding: 0.3% 2%;
+        list-style-type: none;
+    }
+    a.active {
+        color: $normal-darker;
+        background: $normal;
+    }
+}
+#footer {
+    width: 90%;
+    margin: 0 auto;
+}
+
+.button {
+    @include button($backgroundNormal, $normal);
+}
+
+.logo {
+    display: inline-block;
+    height: inherit;
+    background: sprite($icons, logo) no-repeat;
+}
+
+@keyframes slidein {
+  0% {
+    color: $normal;
+    margin: 0;
+    background: $white;
+  }
+  100% {
+    color: $normal-darker;
+    margin: 10px 0 0 10px;
+    background: $backgroundNormal;
+  }
+}
+
+.article {
+    border-top: 1px solid $normal;
+    margin-bottom: 7px;
+    padding: 1%;
+    img {
+        float: left;
+        height: 100%;
+    }
+    &:after {
+        content: "";
+        display: block;
+        clear: both;
+    }
+    .h4 {
+        font-size: 1.2em/1.4;
+    }
+    > a {
+        display: block;
+        width: 38%;
+        text-align: right;
+        color: $normal;
+        &:hover {
+            animation: slidein 0.5s cubic-bezier(0.2, 0.4, 1.0, 0.8) infinite alternate-reverse;
+        }
+    }
+}
+
+@import "mobile.scss";

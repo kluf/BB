@@ -1,0 +1,317 @@
+_.templateSettings = {
+    interpolate: /\{\{(.+?)\}\}/g
+}
+
+var User = Backbone.Model.extend({
+    url: function() {
+        return '/user-' + this.get('id') + '.json';
+    }
+});
+
+var Users = Backbone.Collection.extend({
+    model: User,
+    url: '/users.json'
+});
+
+var Follow = Backbone.Model.extend({
+    urlRoot: '/follow'
+});
+
+var Photo = Backbone.Model.extend({
+    urlRoot: '/photos',
+    sync: function(method, model, options) {
+        var opts = {
+            url: this.url(),
+            success: function(data) {
+                if (options.success) {
+                    options.success(data);
+                }
+            }
+        }
+        switch(method) {
+            case 'create':
+                opts.type = 'POST';
+                opts.data = new FormData();
+                opts.data.append('file', model.get('file'));
+                opts.data.append('caption', model.get('caption'));
+                opts.processData = false;
+                opts.contentType = false;
+                break;
+            default:
+                opts.type = 'GET';
+        }
+        return $.ajax(opts);
+    }
+});
+
+var Photos = Backbone.Collection.extend({
+    model: Photo,
+    initialize: function(options) {
+        if (options && options.url) {
+            this.url = options.url;
+        }
+    }
+});
+
+var Comment = Backbone.Model.extend();
+var Comments = Backbone.Collection.extend({
+    model: Comment,
+    initialize: function(options) {
+        this.photo = options.photo;
+    },
+    url: function() {
+        return this.photo.url() + '/comments';
+    }
+})
+
+var CommentView = Backbone.View.extend({
+    template: _.template($('#commentView').html()),
+    render: function() {
+        console.log(this.model.toJSON());
+        this.el.innerHTML = this.template(this.model.toJSON());
+        return this;
+    }
+});
+
+var UserListView = Backbone.View.extend({
+    tagName: 'ul',
+    render: function() {
+        this.collection.forEach(function(model) {
+            this.$el.append((new UserListItemView({
+                model: model,
+            })).render().el);
+        }, this);
+        return this;
+    }
+});
+
+var UserListItemView = Backbone.View.extend({
+    tagName: 'li',
+    template: _.template('<a href="/users/{{id}}">{{username}}</a>'),
+    events: {
+        'click #follow': 'follow',
+        'click #unfollow': 'unfollow'
+    },
+    render: function() {
+        this.el.innerHTML = this.template(this.model.toJSON());
+        if (USER.username === this.model.get('username')) {
+            this.$el.append(" (me)");
+        } else {
+            this.update();
+        }
+        return this;
+    },
+    update: function() {
+        if (USER.following.indexOf(this.model.get('id')) === -1) {
+            this.$("#unfollow").remove();
+            this.$el.append("<button id='follow'>Follow</button>");
+        } else {
+            this.$("#follow").remove();
+            this.$el.append("<button id='unfollow'>Unfollow</button>");
+        }
+    },
+    follow: function() {
+        var thiz = this,
+            f = new Follow({userId: thiz.model.id});
+        f.save().then(function(user) {
+            USER.following = user.following;
+            thiz.update();
+        });
+    },
+    unfollow: function() {
+        var thiz = this,
+            f = new Follow({id: thiz.model.id});
+        console.log(thiz.model.id);
+        f.destroy().then(function(user) {
+            USER.following = user.following;
+            thiz.update();
+        });
+    }
+});
+
+var PhotoPageView = Backbone.View.extend({
+    template: _.template($('#photoPageView').html()),
+    initialize: function() {
+        this.collection.on('add', this.showComment, this);
+    },
+    events: {
+        'click button': 'addComment'
+    },
+    render: function() {
+        this.el.innerHTML = this.template(this.model.toJSON());
+        this.collection.forEach(this.showComment.bind(this));
+        return this;
+    },
+    addComment: function() {
+        var textarea = this.$('#commentText'),
+            text = textarea.val(),
+            comment = {
+                text: text,
+                photoId: this.model.get('id'),
+                username: USER.username
+            };
+        textarea.val("");
+        this.collection.create(comment);
+    },
+    showComment: function(comment) {
+        var commentView = new CommentView({model: comment});
+        this.$("ul").append(commentView.render().el);
+    }
+});
+
+
+var navView = Backbone.View.extend({
+    template: _.template($('#navView').html()),
+    render: function() {
+        this.el.innerHTML = this.template(USER);
+        return this;
+    }
+});
+
+var addPhotoView = Backbone.View.extend({
+    tagName: 'form',
+    initialize: function(options) {
+        this.photos = options.photos;
+    },
+    template: _.template($('#addPhotoView').html()),
+    events: {
+        'click button': 'uploadFile'
+    },
+    render: function() {
+        this.el.innerHTML = this.template();
+        return this;
+    },
+    uploadFile: function(e) {
+        e.preventDefault();
+        var photo = new Photo({
+            file: $('#imageUpload')[0].files[0],
+            caption: $('#imageCaption').val()
+        });
+        this.photos.create(photo, {wait: true});
+        this.el.reset();
+    }
+});
+
+var PhotosView = Backbone.View.extend({
+    tagName: 'ul',
+    template: _.template($('#photosView').html()),
+    initialize: function() {
+        this.collection.on('add', this.addPhoto, this);
+    },
+    render: function() {
+        this.collection.forEach(this.addPhoto, this);
+            return this;
+    },
+    addPhoto: function(photo) {
+        this.$el.append(this.template(photo.toJSON()));
+    }
+});
+
+var PhotoView = Backbone.View.extend({
+    template: _.template($('#photoView').html()),
+    tagName: 'li',
+    render: function() {
+        console.log(this.model);
+        this.el.innerHTML = this.template(this.model);
+        return this;
+    }
+});
+
+var UserView = Backbone.View.extend({
+    template: _.template($('#userView').html()),
+    render: function() {
+        this.el.innerHTML = this.template(this.model);
+        var ul = this.$('ul');
+        this.collection.models[0].attributes.data.forEach(function(photo) {
+            ul.append(new PhotoView({
+                model: photo
+            }).render().el);
+        });
+        return this;
+    }
+});
+
+var AppRouter = Backbone.Router.extend({
+    initialize: function(options) {
+        this.main = options.main;
+        this.navView = new navView();
+        this.userPhotos = options.userPhotos;
+        this.followingPhotos = options.followingPhotos;
+        Backbone.history.start({
+            pushState: true,
+        });
+    },
+    routes: {
+        '': 'index',
+        'upload': 'upload',
+        'users/:id': 'showUser',
+        'photo/:id': 'showPhoto',
+        'users': 'showUsers',
+    },
+    index: function() {
+        var photosView = new PhotosView({
+            collection: this.followingPhotos
+        });
+        this.main.html(this.navView.render().el);
+        this.main.append(photosView.render().el);
+    },
+    upload: function() {
+        var apv = new addPhotoView({photos: this.userPhotos}),
+            photosView = new PhotosView({collection: this.userPhotos});
+        this.main.html(this.navView.render().el);
+        this.main.append(apv.render().el);
+        this.main.append(photosView.render().el);
+    },
+    showUser: function(id) {
+        var thiz = this,
+            user,
+            photos;
+        id = parseInt(id, 10);
+
+        function render() {
+            var userView = new UserView({
+                model: user.toJSON(),
+                collection: photos
+            });
+            thiz.main.html(thiz.navView.render().el);
+            thiz.main.append(userView.render().el);
+        }
+
+        if (id === USER.id) {
+            user = new User(USER);
+            photos = this.userPhotos;
+            render();
+        } else {
+            user = new User({id: id});
+            photos = new Photos({url: '/photos/user' + id});
+            user.fetch().then(function() {
+                photos.fetch().then(render);
+            });
+        }
+    },
+    showPhoto: function(id) {
+        var thiz = this,
+            photo = new Photo({id: parseInt(id, 10)});
+        photo.fetch().then(function() {
+            var comments = new Comments({photo: photo});
+            var photoView = new PhotoPageView({
+                model: photo,
+                collection: comments
+            });
+            comments.fetch().then(function() {
+                thiz.main.html(thiz.navView.render().el);
+                thiz.main.append(photoView.render().el);
+            })
+        });
+    },
+    showUsers: function() {
+        var thiz = this,
+            users = new Users();
+        this.main.html(this.navView.render().el);
+        users.fetch().then(function() {
+            thiz.main.append(new UserListView({
+                collection: users
+            }).render().el);
+        });
+    }
+});

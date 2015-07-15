@@ -1,0 +1,11 @@
+{
+    "name": "mogoosetest",
+    "description": "Testing of mongoose",
+    "version": "0.1.0",
+    "scripts": {
+        "start": "nodemon server.js"
+    },
+    "devDependencies": {
+        "nodemon": "latest"
+    }
+}

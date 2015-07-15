@@ -1,0 +1,17 @@
+{
+  "name": "vieBrowserify",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "backbone": "^1.1.2",
+    "jquery": "^2.1.1",
+    "jquery-untouched": "^1.10.2",
+    "pushstate-server": "^1.1.0"
+  }
+}

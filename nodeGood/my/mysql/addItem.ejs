@@ -1,0 +1,9 @@
+<form method="POST" action="http://localhost:3000/update" enctype="multipart/form-data">
+    <input type="hidden" name="id" value=<%= data.id %>>
+    <p>Date (YYYY-MM-DD):<br/><input name="date" type="text"  value=<%= data.date %>><p/>
+    <p>Hours worked:<br/><input name="hours" type="text" value=<%= data.hours %>><p/>
+    <p>Description:<br/>
+    <textarea name="description"><%= data.description %></textarea></p>
+    <input type="file" name="upload" multiple="multiple">
+    <input type="submit" value="Update" />
+</form>

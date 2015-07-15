@@ -1,0 +1,48 @@
+@import "compass/utilities/sprites/base";
+@import "grid.scss";
+
+@media screen and (max-width: 540px) {
+.span-1 {
+    @include spanwidth(50%, 1%);
+}
+.span-2, .span-3, .span-4, .span-5, .span-6, .span-7, .span-8, .span-9, .span-10{
+    @include spanwidth(100%, 1%);
+}
+// form's elements for mobile
+.inputGroup {
+    width: 100%;
+    margin-bottom: 10px;
+    label, input, textarea {
+        vertical-align: middle;
+        margin-right: 1%;
+        display: block;
+        width: 100%;
+        overflow-x: show;
+    }
+    textarea {
+        height: 80px;
+    }
+}
+.button {width: 100%;}
+.menu {
+    height: 30px;
+    background-color: $black;
+    background: sprite($icons, menu) no-repeat;
+    li {
+        display: none;
+    }
+    &.display{
+        display: block;
+        height: auto;
+        li {
+            display: block;
+            width: 100%;
+            padding-left: 0;
+            &:first-child {
+                padding-top: 30px;
+            }
+        }
+    }
+}
+
+}

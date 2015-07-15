@@ -1,0 +1,5 @@
+<form action=<%= "http://localhost:3000/" + path %> method="POST">
+    <p>Do you want to <%= label %> with id: <%= id %></p>
+    <input type="hidden" name="id" value="<%= id %>">
+    <input type="submit" value="<%= label %>">
+</form>

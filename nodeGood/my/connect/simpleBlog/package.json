@@ -1,0 +1,7 @@
+{
+    "name": "death-clock",
+    "version": "1.0.0",
+    "scripts": {
+        "start": "mongod | nodemon server.js"
+    }
+}

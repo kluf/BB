@@ -1,0 +1,4 @@
+http://feeds.reuters.com/news/artsculture
+http://feeds.reuters.com/reuters/businessNews
+http://feeds.reuters.com/Counterparties
+http://feeds.reuters.com/reuters/healthNews

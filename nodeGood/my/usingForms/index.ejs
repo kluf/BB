@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+</head>
+<body>
+    <ul>
+    <% for(var i = 0; i < items.length; i += 1) { %>
+        <li><%= items[i] %></li>
+    <% } %>
+    </ul>
+    <form method="POST">
+    <p><label for="addItem"><input name="addItem" type="text"></label>
+        <button type="submit">Add</button>
+    </p>
+    </form>
+</body>
+</html>

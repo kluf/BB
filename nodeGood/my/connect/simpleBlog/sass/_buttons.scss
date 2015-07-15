@@ -1,0 +1,21 @@
+@import "compass/utilities/color/brightness";
+@import "compass/css3/text-shadow";
+@import "compass/css3/box-shadow";
+
+$default-text-shadow-blur: 1px;
+$default-text-shadow-v-offset: 1px;
+
+@mixin button ($startcolor, $endcolor){
+    padding: 5px 8px;
+    border-radius: 3px;
+    border: 1px solid $startcolor;
+    cursor: pointer;
+    @include background-image(linear-gradient($startcolor, $endcolor));
+    font: 0.9em/1.2 "Hatori hanzo", sans-serif;
+    color: $text-normal;
+    @include text-shadow($black, 1px 1px 1px, $black, 1px 1px 1px);
+    @include box-shadow($startcolor 0 0 3px, $startcolor 0 0 1px 1px inset);
+    &:hover, &:active {
+        @include background-image(linear-gradient($endcolor, $startcolor));
+    }
+}

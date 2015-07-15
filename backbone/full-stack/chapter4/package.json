@@ -1,0 +1,16 @@
+{
+  "name": "chapter1",
+  "version": "0.0.0",
+  "description": "this is test app from chapter 1",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "admin",
+  "license": "ISC",
+  "dependencies": {
+    "backbone": "^1.2.1",
+    "jquery": "^2.1.4",
+    "pushstate-server": "^1.6.0"
+  }
+}

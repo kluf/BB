@@ -1,0 +1,23 @@
+{
+  "name": "chapter1",
+  "version": "0.0.0",
+  "description": "this is test app from chapter 1",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "admin",
+  "license": "ISC",
+  "dependencies": {
+    "backbone": "^1.2.1",
+    "backbone.obscura": "^1.0.1",
+    "jquery": "^2.1.4",
+    "pushstate-server": "^1.6.0",
+    "grunt-browserify": "~2.0.7",
+    "grunt-contrib-watch": "~0.6.1",
+    "nodemon": "~1.0.17"
+  },
+  "devDependencies": {
+    "jstify": "^0.11.0"
+  }
+}

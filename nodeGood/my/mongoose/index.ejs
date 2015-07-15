@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Some title</title>
+    <style>
+        td {
+            border: 1px solid #fec;
+        }
+    </style>
+</head>
+<body>
+    <h1>asdf</h1>
+    <a href="/add">Add</a>
+    <table>
+    <% for (var i = works.length - 1; i >= 0; i -= 1) { %>
+    <tr>
+        <td><%= works[i].description %></td>
+        <td><%= works[i].hours %></td>
+        <td><%= works[i].date %></td>
+        <td><a href="/edit/<%= works[i]._id %>">Edit</a></td>
+        <td><a href="/delete/<%= works[i]._id %>">Delete</a></td>
+    </tr>
+    <% } %>
+    </table>
+</body>
+</html>

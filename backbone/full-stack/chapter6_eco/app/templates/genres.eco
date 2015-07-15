@@ -1,0 +1,10 @@
+<h5>eco template</h5>
+<ul class="filter-genres">
+  <% for genre in genres: %>
+    <li>
+      <input type="checkbox" name="genres" value="<%= name %>">
+      <%= name %>
+      </input>
+     </li>
+  <% end %>
+</ul>

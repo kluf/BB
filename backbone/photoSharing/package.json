@@ -1,0 +1,19 @@
+{
+  "name": "PhotoSharing",
+  "description": "This is a simple photo sharing site.",
+  "version": "0.1.0",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.1.0",
+    "bourne": "0.3",
+    "ejs": "~0.8.4",
+    "express": "3.x.x",
+    "passport": "^0.2.1",
+    "passport-local": "^1.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "latest"
+  }
+}

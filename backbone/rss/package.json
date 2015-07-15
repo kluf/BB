@@ -1,0 +1,19 @@
+{
+  "name": "simple-blog",
+  "description": "This is a simple blog.",
+  "version": "0.1.0",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.1.0",
+    "bourne": "0.3",
+    "ejs": "~0.8.4",
+    "express": "3.x.x",
+    "q": "^1.4.1",
+    "xml2js": "^0.4.9"
+  },
+  "devDependencies": {
+    "nodemon": "latest"
+  }
+}

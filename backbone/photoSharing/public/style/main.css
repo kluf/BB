@@ -1,0 +1,6 @@
+img {
+    width: 300px;
+    height: auto;
+}
+
+#main div ul li {display: inline-block; margin-right: 10px;}
