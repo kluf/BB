@@ -5,6 +5,7 @@ var ejs = require('ejs');
 var fs = require('fs');
 var path = require('path');
 var app = connect();
+var static = require('serve-static');
 var localization = require('./helpers/localization');
 var loc = new localization('ua', null);
 var Controller = require('./helpers/controller');
@@ -12,7 +13,7 @@ var controller = new Controller();
 // gzip/deflate outgoing responses
 var compression = require('compression');
 app.use(compression());
-app.use(connect.static(path.join(__dirname, '/public')));
+app.use(static(path.join(__dirname, '/public')));
 // store session state in browser cookie
 var cookieSession = require('cookie-session');
 app.use(cookieSession({

@@ -2,41 +2,39 @@ function usersget(req, res, next) {
     res.end('usersget');
 }
 
+function userspost(req, res, next) {
+    res.end('userspost');
+}
+
+function notFould(req, res, next) {
+    res.end('404 not fould');
+}
+
 var routes = {
-    'users': [{get: usersget}],
-    '404': ['404']
+    users: [{get: usersget}, {404: notFould}],
+    404: [{404: notFould}]
 }
 
 var Controller = function() {
+
     this.findRoute = function(req, res, next) {
         var requestedUrl = req.url;
         var method = req.method;
         var cleanUrlPattern = /http:\/\//;
-        var action = requestedUrl.toString().replace(cleanUrlPattern, '').split('/')[1];
-        console.log('action = ' + requestedUrl.toString());
-        for (var i in routes) {
-            // console.log(i + ' - ' + action);
-            if (action == i) {
-                switch (method) {
-                    case 'POST':
-                        break;
-                    case 'GET':
-                        this.getRoute(routes[i].get(req, res, next);
-                        break;
-                    case 'UPDATE':
-                        break;
-                    case 'DELETE':
-                        break;
-                    default:
-                }
-            } else {
-
-            }
-        }
+        var action = requestedUrl.toString().replace(cleanUrlPattern, '').split('/')[1].replace('/', '');
+        this.getRoute(action, req, res, next);
         next();
-    }
-    this.getRoute = function(route, req, res, next) {
-        for
+    };
+
+    getRoute = function(route, req, res, next) {
+        var method = req.method;
+        for (var i in routes) {
+            routes[route].forEach(function(route) {
+                for (var i in route) {
+                    route[req.method.toLowerCase()](req, res, next);
+                }
+            });
+        }
     }
 }
 

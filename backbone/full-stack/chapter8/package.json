@@ -13,11 +13,15 @@
     "backbone.obscura": "^1.0.1",
     "jquery": "^2.1.4",
     "morgan": "^1.6.1",
-    "proxy-middleware": "^0.13.0",
+    "proxy-middleware": "^0.13.1",
     "pushstate-server": "^1.6.0"
   },
   "devDependencies": {
     "canned": "^0.3.3",
+    "grunt": "^0.4.5",
+    "grunt-browserify": "^4.0.0",
+    "grunt-contrib-handlebars": "^0.10.2",
+    "grunt-contrib-watch": "^0.6.1",
     "jstify": "^0.11.0"
   }
 }

@@ -6,6 +6,11 @@ can = canned('.', opts);
 
 var express = require('express');
 var app = express();
+var logger = require('morgan');
+var url = require('url');
+var proxy = require('proxy-middleware');
+app.use(logger('dev',{immediate: true}));
+app.use('/apimovies', proxy(url.parse("http://0.0.0.0:5001/apimovies")));
 app.use(express.static(__dirname + '/static'));
 app.use(can);
 

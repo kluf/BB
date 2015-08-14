@@ -27,3 +27,6 @@
     margin-left: 220px;
     width: 150px;
 }
+#sorting label {
+    display: block;
+}

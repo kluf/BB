@@ -1,7 +1,18 @@
 {
-    "name": "death-clock",
-    "version": "1.0.0",
-    "scripts": {
-        "start": "mongod | nodemon server.js"
-    }
+  "name": "death-clock",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "mongod | nodemon server.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.13.2",
+    "compression": "^1.5.1",
+    "connect": "^3.4.0",
+    "cookie-session": "^1.2.0",
+    "ejs": "^2.3.3",
+    "mongoose": "^4.0.7",
+    "nodemon": "^1.3.7",
+    "path": "^0.11.14",
+    "serve-static": "^1.10.0"
+  }
 }
