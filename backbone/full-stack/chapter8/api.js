@@ -34,7 +34,14 @@ server.get('api/genres', function(req, res, next) {
     res.send(genres);
 });
 
-var port = 5000;
+server.put('/api/movies/:key', function(req, res, next) {
+    return ds.voteMovie(req.params.key, req.params.vote)
+            .then(function(m) {res.send(m);})
+            .error(function(err) {res.send(400, err.message);})
+            .catch(function(err) {res.send(500, err.message);});
+});
+
+var port = 5001;
 server.listen(port, function() {
     console.log("Running API server");
 });
