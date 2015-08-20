@@ -11,10 +11,13 @@
   "dependencies": {
     "backbone": "^1.2.1",
     "backbone.obscura": "^1.0.1",
+    "bluebird": "^2.9.34",
     "jquery": "^2.1.4",
     "morgan": "^1.6.1",
     "proxy-middleware": "^0.13.1",
-    "pushstate-server": "^1.6.0"
+    "pushstate-server": "^1.6.0",
+    "restify": "^4.0.0",
+    "sha1": "^1.1.1"
   },
   "devDependencies": {
     "canned": "^0.3.3",

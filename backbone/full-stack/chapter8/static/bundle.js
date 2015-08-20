@@ -87,6 +87,7 @@ var Backbone = require('backbone');
 
 var Movie = Backbone.Model.extend({
     url: '/movies',
+    idAttribute: '_key',
     toShowTimeDate: function() {
         var d = new Date(0);
         d.setUTCSeconds(this.get('showtime'));
@@ -411,7 +412,8 @@ var Layout = require('../views/layout');
 var MoviesRouter = Backbone.Router.extend({
     routes: {
         'movies/:id': 'selectMovie',
-        '': 'showMain'
+        '': 'showMain',
+        'details/:key': 'showDetails'
     },
     selectMovie: function(id) {
         // this.moviesList.render();
@@ -436,6 +438,11 @@ var MoviesRouter = Backbone.Router.extend({
         //     collection: movies,
         // });
         // _.extend(this.moviesList, {router: this});
+    },
+    showDetails: function(key) {
+        var movie = new Movie({_key: key});
+        this.listenTo(movie, 'all', function(ev) {console.log(ev)});
+        movie.fetch();
     }
 });
 
