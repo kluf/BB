@@ -3,6 +3,7 @@ var _ = require('underscore');
 var sha1 = require('sha1');
 
 var Promise = require('bluebird');
+var Users = [];
 
 Promise.promisifyAll(fs);
 
@@ -96,4 +97,107 @@ DS.prototype.voteMovie = function(id, vote, voter) {
         return that.showMovie(id);
     });
 }
+
+function _createUser(raw) {
+    if (raw.body.username) {
+        var userId = Users.length + 1;
+        var newUser = {
+            id: userId,
+            username: raw.body.username,
+            password: raw.body.password,
+            email: raw.body.email
+        }
+        Users.push(newUser);
+        return _returnUser(newUser);
+    }
+}
+
+function _returnUser(newUser) {
+    var testUser = _.pick(newUser, 'username', 'id');
+    console.log('pick = ' + testUser);
+    return _.pick(newUser, 'username', 'id');
+}
+
+function _findByUsername(username) {
+    var user = _.findWhere(Users, {username: username});
+    console.log(Users);
+    console.log(username);
+    return Promise.delay(30).return(user);
+}
+
+function getCookies(req) {
+    var cookies = {};
+    request.headers && request.headers.cookie && request.headers.cookie.split(';').forEach(function(cookie) {
+        var parts = cookie.match(/(.*?) = (.*)?/);
+        cookies[parts[1].trim()] = (parts[2] || '').trim();
+    });
+    return cookies;
+}
+
+function _findByUserToken(req) {
+    var cookies = getCookies(req);
+    var user = _.findWhere(Users, {token: cookies.session});
+    return Promise.delay(30).return(user);
+}
+
+
+
+function _checkDuplicates(raw) {
+    var username = raw.body.username;
+    return _findByUsername(username).then(function(existingUser) {
+        if (existingUser) {
+            return Promise.RejectionError('username taken');
+        }
+        else
+            return raw;
+    });
+}
+
+
+function _matchPasswords(req) {
+    return _findByUsername(req.body.username).then(function(activeUser) {
+        if (activeUser && req.body.password === activeUser.password) {
+            return activeUser;
+        } else {
+            return Promise.RejectionError('username not found');
+        }
+    });
+}
+
+function _generateToken(activeUser) {
+    var token = sha1(_.now().toString());
+    activeUser.token = token;
+    return activeUser;
+}
+
+
+DS.prototype.createUser = function(req) {
+    // console.log('body' + req.body);
+    return _checkDuplicates(req).then(_createUser);
+}
+
+DS.prototype.authUser = function(req) {
+    return _matchPasswords(req).then(_generateToken);
+}
+
+DS.prototype.checkAuth = function(req) {
+    return _findByUserToken(req).then(function(activeUser) {
+        if (!activeUser) {
+            return Promise.Reject("No session");
+        }
+        return _returnUser(activeUser);
+    });
+}
+
+DS.prototype.clearSession = function(req) {
+    return _findByUserToken(req).then(function(activeUser) {
+        if (activeUser) {
+            activeUser.auth = null;
+        }
+        return activeUser
+    });
+}
+
 module.exports = DS;
+// {"username":"vova2d","password":"asdf"}
+//curl -H "Content-Type: application/json" -d "{"username":"vova","password":"asdf"}" 127.0.0.1:5001/api/auth/create_user

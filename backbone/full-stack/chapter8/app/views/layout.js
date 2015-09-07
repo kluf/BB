@@ -7,6 +7,7 @@ var ChoseView = require('./choseView');
 var Controls = require('./sort');
 var Obscura = require('backbone.obscura');
 var GenresViews = require('./genresViews');
+var Navbar = require('./navbar');
 var Layout = Backbone.View.extend({
     template: _.template('           \
              <header>              \
@@ -19,7 +20,8 @@ var Layout = Backbone.View.extend({
              <div id="overview">   \
              </div>                \
              <div id="details">    \
-             </div><div id="sorting"></div>'),
+             </div><div id="sorting"></div><nav id="session"> \
+               </nav>'),
     render: function() {
         // this.$el.append(this.moviesList.render().el);
         this.$el.html(this.template());
@@ -27,6 +29,7 @@ var Layout = Backbone.View.extend({
         this.currentDetails.setElement(this.$('#details')).render();
         this.overview.setElement(this.$('#overview')).render();
         this.sorting.setElement(this.$('#sorting')).render();
+        this.navbar.setElement(this.$('#session')).render();
         return this;
     },
     setDetails: function(movie) {

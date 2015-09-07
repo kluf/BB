@@ -30,5 +30,5 @@ app.use(function(req, res, next) {
 })
 
 http.createServer(app).listen(port, function() {
-    console.log('Frontent listened at port %s', port);
+    console.log('Frontend listened at port %s', port);
 });

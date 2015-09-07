@@ -23,7 +23,7 @@
     "canned": "^0.3.3",
     "grunt": "^0.4.5",
     "grunt-browserify": "^4.0.0",
-    "grunt-contrib-handlebars": "^0.10.2",
+    "grunt-contrib-handlebars": "^0.10",
     "grunt-contrib-watch": "^0.6.1",
     "jstify": "^0.11.0"
   }
