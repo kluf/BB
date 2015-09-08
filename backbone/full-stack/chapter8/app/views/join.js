@@ -1,6 +1,6 @@
 var Backbone = require('backbone');
 var ModalView = require('./modal');
-var Handlebars = require('gulp-handlebars');
+var Jade = require('jade');
 var Templates = require('../templates/compiledTemplates')('Handlebars');
 var _ = require('underscore');
 var $ = require('jquery-untouched');
