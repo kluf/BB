@@ -1,0 +1,9 @@
+<button id="by_title">By Title</button>
+<button id="by_rating">By Rating</button>
+<button id="by_showtime">By Showtime</button> 
+<a id="prev">prev</a>&nbsp<a id="next">Next</a>
+<ul>
+    {{#each genres}}
+        <li><input type="checkbox" name={{this}}>{{this}}</li>
+    {{/each}}
+</ul>

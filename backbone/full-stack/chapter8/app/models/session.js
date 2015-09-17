@@ -7,6 +7,7 @@ var Session = Backbone.Model.extend({
     login: function(username, password) {
         var that = this;
         var credentials = JSON.stringify({username: username, password: password});
+        console.log(credentials);
         $.ajax({
             type: 'POST',
             dataType: 'json',

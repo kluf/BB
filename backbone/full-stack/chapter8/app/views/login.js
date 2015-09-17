@@ -1,14 +1,14 @@
 var ModalView = require('./modal');
 var Backbone = require('backbone');
-var Handlebars = require('gulp-handlebars');
-var Templates = require('../templates/compiledTemplates')('Handlebars');
+var Handlebars = require('handlebars');
+var Templates = require('../templates/compiledTemplates')(Handlebars);
 var $ = require('jquery-untouched');
 var _ = require('underscore');
 
 var Session = require('../models/session');
 
 var LoginView = ModalView.extend({
-    template: Templates['login'],
+    template: Templates["app/templates/login"],
     events: {
         'submit': 'login'
     },

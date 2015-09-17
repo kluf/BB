@@ -1,14 +1,11 @@
 var Backbone = require('backbone');
 var _ = require('underscore');
 var $ = Backbone.$;
+var Handlebars = require('handlebars');
+var Templates = require('../templates/compiledTemplates')(Handlebars);
 
 var SortView = Backbone.View.extend({
-    template: _.template('  \
-                 <p>Sort:</p> \
-                 <button id="by_title">By Title</button>  \
-                 <button id="by_rating">By Rating</button>\
-                 <button id="by_showtime">By Showtime</button> \
-                 <a id="prev">prev</a>&nbsp<a id="next">Next</a>'),
+    template: Templates["app/templates/genres"],
     events: {
         'click #by_title': 'sortByTitle',
         'click #by_rating': 'sortByRating',
@@ -16,6 +13,7 @@ var SortView = Backbone.View.extend({
         'change select[name="genre"]': 'selectGenre',
         'click a#next': 'nextPage',
         'click a#prev': 'prevPage',
+        'click ul input': 'selectGenre'
     },
     sortByRating: function() {
         this.superset.setSort("rating", "asc");
@@ -30,6 +28,7 @@ var SortView = Backbone.View.extend({
         this.movies = this.collection;
         this.superset = options.proxy;
         this.superset.setPerPage(3);
+        this.genres = ['Comedy', 'Action', 'Drama'];
     },
     nextPage: function(ev) {
         ev.preventDefault();
@@ -40,13 +39,15 @@ var SortView = Backbone.View.extend({
         this.superset.prevPage();
     },
     selectGenre: function(ev) {
-        var genre1 = $('select[name="genre"]').val();
-        console.log(genre1);
-        if (genre1 == "all") {
-            this.superset.removeTransforms();
+        var genre = ev.currentTarget.name;
+        if (!genre) {
+            this.superset.resetFilters();
         } else {
-            this.superset.removeTransforms();
-            this.superset.filterBy('selected genre', {genre: genre1});
+            this.superset.resetFilters();
+            this.superset.filterBy('genres', function(model) {
+                console.log(model.get('genres'));
+                return model.get('genres') == genre;
+            });
         }
     },
     filterByCategory: function(genre) {
@@ -56,7 +57,7 @@ var SortView = Backbone.View.extend({
         this.collection.reset(filtered);
     },
     render: function() {
-        this.$el.html(this.template());
+        this.$el.html(this.template({genres: this.genres}));
         return this;
     }
 });

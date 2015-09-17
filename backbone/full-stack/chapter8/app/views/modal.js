@@ -11,7 +11,7 @@ var ModalView = Backbone.View.extend({
         return this;
     },
     closeModal: function(ev) {
-        if (ev) preventDefault();
+        if (ev) ev.preventDefault();
         this.$el.unbind();
         this.$el.empty();
         this.$el.remove();

@@ -28,7 +28,7 @@ server.get('/api/movies/:key', function(req, res, next) {
         .catch(function(err) {res.send(500, err)});
 });
 
-server.get('api/genres', function(req, res, next) {
+server.get('/api/genres', function(req, res, next) {
     var genres = _.chain(movies)
                 .map(function(movie) {
                     return movie.genres
@@ -40,6 +40,7 @@ server.get('api/genres', function(req, res, next) {
 });
 
 server.post('/api/auth/create_user', urlencodedParser, function(req, res, next) {
+    console.log('req');
     ds.createUser(req)
         .then(function(user) {
             res.send({id: user.id, username: user.username});

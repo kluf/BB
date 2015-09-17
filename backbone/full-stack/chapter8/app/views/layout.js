@@ -6,8 +6,8 @@ var DetailsView = require('./details');
 var ChoseView = require('./choseView');
 var Controls = require('./sort');
 var Obscura = require('backbone.obscura');
-var GenresViews = require('./genresViews');
-var Navbar = require('./navbar');
+var NavbarView = require('./navbar');
+
 var Layout = Backbone.View.extend({
     template: _.template('           \
              <header>              \
@@ -28,7 +28,6 @@ var Layout = Backbone.View.extend({
         this.controls.setElement(this.$('#controls')).render();
         this.currentDetails.setElement(this.$('#details')).render();
         this.overview.setElement(this.$('#overview')).render();
-        this.sorting.setElement(this.$('#sorting')).render();
         this.navbar.setElement(this.$('#session')).render();
         return this;
     },
@@ -49,8 +48,8 @@ var Layout = Backbone.View.extend({
             router: options.router
         });
         this.controls = new Controls({proxy: this.proxy});
-        this.sorting = new GenresViews();
         this.currentDetails = new ChoseView();
+        this.navbar = new NavbarView();
     }
 });
 

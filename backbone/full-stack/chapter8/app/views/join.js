@@ -1,16 +1,16 @@
 var Backbone = require('backbone');
 var ModalView = require('./modal');
-var Jade = require('jade');
-var Templates = require('../templates/compiledTemplates')('Handlebars');
+var Handlebars = require('handlebars');
+var Templates = require('../templates/compiledTemplates')(Handlebars);
 var _ = require('underscore');
 var $ = require('jquery-untouched');
 
 var User = require('../models/user');
 
 var JoinView = ModalView.extend({
-    template: Templates['join'],
+    template: Templates["app/templates/join"],
     events: {
-        'submit': 'registerUser'
+        'submit form': 'registerUser'
     },
     render: function() {
         ModalView.prototype.render.call(this);
@@ -20,6 +20,7 @@ var JoinView = ModalView.extend({
     registerUser: function(ev) {
         ev.preventDefault();
         this.user.clear();
+        console.log('register user');
         var username = $('input[name="username"]').val();
         var password = $('input[name="password"]').val();
         var email = $('input[name="email"]').val();

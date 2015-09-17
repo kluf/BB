@@ -8,27 +8,29 @@ module.exports = function(grunt) {
         files: 'app/**/*.js',
         tasks: ['browserify'],
         options: {
-          interrupt: true
+          interrupt: false
         }
       },
       templates: {
-        files: 'app/**/*.jade',
-        tasks: ['jade'],
+        files: 'app/**/*.hbs',
+        tasks: ['handlebars'],
         options: {
           interrupt: true
         }
       },
     },
 
-    jade: {
+    handlebars: {
       compile: {
         options: {
-          namespace: false,
-          wrap: true,
+          commonjs: true,
+          namespace: 'MyTemp',
+          processName: function(filePath) {
+              return filePath.replace(/^templates\//, '').replace(/\.hbs$/, '');
+          }
         },
-        files: {
-          "app/templates/compiledTemplates.js": ["app/templates/join.jade", "app/templates/havbar.jade"]
-        }
+        src: "app/templates/**/*.hbs",
+        dest: "app/templates/compiledTemplates.js"
       }
     },
 
@@ -51,7 +53,7 @@ module.exports = function(grunt) {
   });
 
   grunt.loadNpmTasks('grunt-browserify');
-  grunt.loadNpmTasks('grunt-contrib-jade');
+  grunt.loadNpmTasks('grunt-contrib-handlebars');
   grunt.loadNpmTasks('grunt-contrib-watch');
 
   grunt.registerTask('runFrontend', function () {
@@ -79,7 +81,7 @@ module.exports = function(grunt) {
   });
 
 
-  grunt.registerTask('compile', ['jade', 'browserify']);
+  grunt.registerTask('compile', ['handlebars', 'browserify']);
 
   // Run the server and watch for file changes
   grunt.registerTask('server', ['compile', 'runFrontend', 'runAPI', 'watch']);

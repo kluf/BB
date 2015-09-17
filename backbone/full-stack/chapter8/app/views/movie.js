@@ -19,7 +19,7 @@ var MovieView = Backbone.View.extend({
         evt.preventDefault();
         if (!this.model.get('selected')) {
             this.model.collection.resetSelected();
-            this.model.collection.selectByID(this.model.id);
+            this.model.collection.selectByID(this.model.get('id'));
             this.router.navigate(this.model.url + '/' + this.model.id, {trigger: true});
         }
     },

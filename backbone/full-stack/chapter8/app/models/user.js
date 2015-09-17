@@ -7,7 +7,7 @@ var UserModel = Backbone.Model.extend({
         password: '',
         email: ''
     },
-    urlRoot: 'api/auth/create_user',
+    urlRoot: '/api/auth/create_user',
     validate: function(attrs) {
         var errors = this.errors = {};
         if (!attrs.username) errors.firstname = 'username is required';
@@ -15,6 +15,7 @@ var UserModel = Backbone.Model.extend({
         if (_.isEmpty(errors)) return errors;
     },
     signup: function(attrs) {
+        console.log(attrs);
         var that = this;
         this.save(attrs, {success: function(model, response) {
             that.trigger('signup:success');

@@ -153,7 +153,6 @@ function _checkDuplicates(raw) {
     });
 }
 
-
 function _matchPasswords(req) {
     return _findByUsername(req.body.username).then(function(activeUser) {
         if (activeUser && req.body.password === activeUser.password) {
