@@ -125,10 +125,12 @@ function _findByUsername(username) {
     return Promise.delay(30).return(user);
 }
 
-function getCookies(req) {
+function getCookies(request) {
+    console.dir(request.headers);
     var cookies = {};
     request.headers && request.headers.cookie && request.headers.cookie.split(';').forEach(function(cookie) {
-        var parts = cookie.match(/(.*?) = (.*)?/);
+        var parts = request.headers.cookie.match(/(.*?) = (.*?)/);
+        console.dir(parts);
         cookies[parts[1].trim()] = (parts[2] || '').trim();
     });
     return cookies;
@@ -171,7 +173,7 @@ function _generateToken(activeUser) {
 
 
 DS.prototype.createUser = function(req) {
-    // console.log('body' + req.body);
+    console.log('body' + req.body);
     return _checkDuplicates(req).then(_createUser);
 }
 

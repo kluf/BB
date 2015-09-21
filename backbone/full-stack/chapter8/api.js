@@ -15,6 +15,7 @@ server.use(restify.fullResponse());
 server.use(restify.bodyParser());
 
 server.get('/api/movies', function(req, res, next) {
+    console.log(req);
     return ds.allMovies()
             .then(function(m) {res.send(m);})
             .catch(function(err) {res.send(500, err)});
@@ -40,7 +41,7 @@ server.get('/api/genres', function(req, res, next) {
 });
 
 server.post('/api/auth/create_user', urlencodedParser, function(req, res, next) {
-    console.log('req');
+    // res.send(req);
     ds.createUser(req)
         .then(function(user) {
             res.send({id: user.id, username: user.username});
@@ -63,7 +64,7 @@ server.put('/api/movies/:key', function(req, res, next) {
 
 server.get('/api/auth/session', urlencodedParser, function(req, res, next) {
     console.log('test' + req.body.username);
-    db.checkAuth(req)
+    ds.checkAuth(req)
         .then(function(user) {
             res.send({auth: "OK", id: user.id, username: user.username});
         })
@@ -78,7 +79,7 @@ server.get('/api/auth/session', urlencodedParser, function(req, res, next) {
 });
 
 server.del('/api/auth/session', urlencodedParser, function(req, res, next) {
-    ds.clearAuth(req)
+    ds.clearSession(req)
         .then(function() {
             res.header('Set-Cookie', 'session=; HttpOnly');
             res.send(200, {auth: "NOK"});
@@ -109,5 +110,5 @@ server.post('/api/auth/session', urlencodedParser, function(req, res, next) {
 
 var port = 5001;
 server.listen(port, function() {
-    console.log("Running API server");
+    console.log("Running API server 1");
 });

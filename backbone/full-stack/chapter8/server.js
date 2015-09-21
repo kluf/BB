@@ -10,7 +10,7 @@ var logger = require('morgan');
 var url = require('url');
 var proxy = require('proxy-middleware');
 app.use(logger('dev',{immediate: true}));
-app.use('/api', proxy(url.parse("http://localhost:5001/api/")));
+app.use('/api', proxy(url.parse("http://localhost:5001/api")));
 app.use(express.static(__dirname + '/static'));
 app.use(can);
 
