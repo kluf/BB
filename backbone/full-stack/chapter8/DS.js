@@ -58,7 +58,6 @@ DS.prototype.voteExist = function(id, voter) {
 }
 
 DS.prototype.addVote = function(vote, key, voter) {
-    console.log('vote for ' + key);
     Movies.then(function(movies) {
         var match = _.find(movies, function(movie) {return sha1(movie.title) === key});
         if (!match) {
@@ -99,40 +98,39 @@ DS.prototype.voteMovie = function(id, vote, voter) {
 }
 
 function _createUser(raw) {
-    if (raw.body.username) {
+    if (JSON.parse(raw.body.data).username) {
         var userId = Users.length + 1;
         var newUser = {
             id: userId,
-            username: raw.body.username,
-            password: raw.body.password,
-            email: raw.body.email
+            username: JSON.parse(raw.body.data).username,
+            password: JSON.parse(raw.body.data).password,
+            email: JSON.parse(raw.body.data).email
         }
         Users.push(newUser);
+        console.log(Users);
         return _returnUser(newUser);
     }
 }
 
 function _returnUser(newUser) {
-    var testUser = _.pick(newUser, 'username', 'id');
-    console.log('pick = ' + testUser);
     return _.pick(newUser, 'username', 'id');
 }
 
 function _findByUsername(username) {
     var user = _.findWhere(Users, {username: username});
-    console.log(Users);
-    console.log(username);
     return Promise.delay(30).return(user);
 }
 
 function getCookies(request) {
     console.dir(request.headers);
     var cookies = {};
-    request.headers && request.headers.cookie && request.headers.cookie.split(';').forEach(function(cookie) {
-        var parts = request.headers.cookie.match(/(.*?) = (.*?)/);
-        console.dir(parts);
-        cookies[parts[1].trim()] = (parts[2] || '').trim();
-    });
+    if (request.headers && request.headers.cookie) {
+        request.headers.cookie.split(';').forEach(function(cookie) {
+            var parts = request.headers.cookie.match(/(.*?)=(.*?)/);
+            console.dir(parts);
+            cookies[parts[1].trim()] = (parts[2] || '').trim();
+        });
+    }
     return cookies;
 }
 
@@ -145,22 +143,23 @@ function _findByUserToken(req) {
 
 
 function _checkDuplicates(raw) {
-    var username = raw.body.username;
+    var username = JSON.parse(raw.body.data).username;
     return _findByUsername(username).then(function(existingUser) {
         if (existingUser) {
-            return Promise.RejectionError('username taken');
+            return Promise.reject('username taken');
         }
-        else
-            return raw;
+        return raw;
     });
 }
 
 function _matchPasswords(req) {
+    console.log(req.body.username);
     return _findByUsername(req.body.username).then(function(activeUser) {
         if (activeUser && req.body.password === activeUser.password) {
             return activeUser;
         } else {
-            return Promise.RejectionError('username not found');
+            console.log('no user found');
+            return Promise.reject('username not found');
         }
     });
 }
@@ -173,7 +172,6 @@ function _generateToken(activeUser) {
 
 
 DS.prototype.createUser = function(req) {
-    console.log('body' + req.body);
     return _checkDuplicates(req).then(_createUser);
 }
 

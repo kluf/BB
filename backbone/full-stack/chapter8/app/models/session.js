@@ -18,8 +18,7 @@ var Session = Backbone.Model.extend({
             that.user = new User(data);
             that.trigger('login:success');
         }).fail(function(response) {
-            var error = JSON.parse(response.responseText).error;
-            console.log(error);
+            var error = response.responseText;
             that.validationError = {"username": error};
             that.trigger('invalid', that);
         });

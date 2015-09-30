@@ -41,7 +41,6 @@ server.get('/api/genres', function(req, res, next) {
 });
 
 server.post('/api/auth/create_user', urlencodedParser, function(req, res, next) {
-    // res.send(req);
     ds.createUser(req)
         .then(function(user) {
             res.send({id: user.id, username: user.username});
@@ -63,7 +62,6 @@ server.put('/api/movies/:key', function(req, res, next) {
 
 
 server.get('/api/auth/session', urlencodedParser, function(req, res, next) {
-    console.log('test' + req.body.username);
     ds.checkAuth(req)
         .then(function(user) {
             res.send({auth: "OK", id: user.id, username: user.username});
@@ -87,7 +85,6 @@ server.del('/api/auth/session', urlencodedParser, function(req, res, next) {
 });
 
 server.post('/api/auth/session', urlencodedParser, function(req, res, next) {
-    console.log('test' + req.body.username);
     if (!req.body.username || !req.body.password) {
         res.send(422, {status: 'err', error: 'username and passwords are required'});
         next();

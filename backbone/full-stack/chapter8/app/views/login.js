@@ -16,6 +16,8 @@ var LoginView = ModalView.extend({
         ModalView.prototype.render.call(this);
         this.delegateEvents();
         this.$error = this.$el.find('.error');
+        console.dir(this.session['validationError']);
+        this.$el.find('.error').innerHTML = JSON.stringify(this.session.validationError);
         return this;
     },
     login: function(ev) {
@@ -28,6 +30,7 @@ var LoginView = ModalView.extend({
     initialize: function() {
         this.session = Session.getInstance();
         this.listenTo(this.session, 'login:success', this.closeModal);
+        this.listenTo(this.session, 'invalid', this.render);
         return ModalView.prototype.initialize.call(this);
     }
 });

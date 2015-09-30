@@ -12,26 +12,30 @@ var UserModel = Backbone.Model.extend({
         var errors = this.errors = {};
         if (!attrs.username) errors.firstname = 'username is required';
         if (!attrs.email) errors.email = 'email is required';
+        if (!attrs.password) errors.password = 'password is required';
         if (_.isEmpty(errors)) return errors;
     },
     signup: function(attrs) {
-        console.log(attrs);
         var that = this;
-        this.save(attrs, {success: function(model, response) {
-            that.trigger('signup:success');
-        },
-        error: function(model, response) {
-            var error = JSON.parse(response.responseText).error;
-            that.validationError = {"username": error};
-            that.trigger('invalid', that);
-        }
+        this.save(JSON.stringify(attrs), {
+            success: function(model, response) {
+                console.log('success');
+                that.trigger('signup:success');
+            },
+            error: function(model, response) {
+                console.log('error');
+                var error = JSON.parse(response.responseText);
+                console.log(error);
+                that.validationError = {"username": error};
+                that.trigger('invalid', that);
+            }
         });
     },
     save: function(attrs, options) {
-        options = options || {};
+        options || (options = {});
         options.contentType = 'application/json';
-        options.data = JSON.stringify(attrs);
-        return Backbone.Model.prototype.save.call(this, attrs, options);
+        options.data = attrs;
+        return Backbone.Model.prototype.save.call(this, options);
     }
 });
 

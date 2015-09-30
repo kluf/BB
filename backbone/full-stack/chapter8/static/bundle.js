@@ -141,8 +141,7 @@ var Session = Backbone.Model.extend({
             that.user = new User(data);
             that.trigger('login:success');
         }).fail(function(response) {
-            var error = JSON.parse(response.responseText).error;
-            console.log(error);
+            var error = response.responseText;
             that.validationError = {"username": error};
             that.trigger('invalid', that);
         });
@@ -193,26 +192,30 @@ var UserModel = Backbone.Model.extend({
         var errors = this.errors = {};
         if (!attrs.username) errors.firstname = 'username is required';
         if (!attrs.email) errors.email = 'email is required';
+        if (!attrs.password) errors.password = 'password is required';
         if (_.isEmpty(errors)) return errors;
     },
     signup: function(attrs) {
-        console.log(attrs);
         var that = this;
-        this.save(attrs, {success: function(model, response) {
-            that.trigger('signup:success');
-        },
-        error: function(model, response) {
-            var error = JSON.parse(response.responseText).error;
-            that.validationError = {"username": error};
-            that.trigger('invalid', that);
-        }
+        this.save(JSON.stringify(attrs), {
+            success: function(model, response) {
+                console.log('success');
+                that.trigger('signup:success');
+            },
+            error: function(model, response) {
+                console.log('error');
+                var error = JSON.parse(response.responseText);
+                console.log(error);
+                that.validationError = {"username": error};
+                that.trigger('invalid', that);
+            }
         });
     },
     save: function(attrs, options) {
-        options = options || {};
+        options || (options = {});
         options.contentType = 'application/json';
-        options.data = JSON.stringify(attrs);
-        return Backbone.Model.prototype.save.call(this, attrs, options);
+        options.data = attrs;
+        return Backbone.Model.prototype.save.call(this, options);
     }
 });
 
@@ -581,11 +584,21 @@ this["MyTemp"]["app/templates/genres"] = Handlebars.template({"1":function(depth
 },"useData":true});
 
 this["MyTemp"]["app/templates/join"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    return "<div class='overlay'></div>\r\n<div class='content'>\r\n   <span class='close'>close</span>\r\n   <section class='join'>\r\n     <h1>Register</h1>\r\n     <div class='error'></div>\r\n     <form>\r\n     <label for='username'>Username</label>\r\n     <input type='text' name='username' />\r\n     <br>\r\n     <label for='email'>Email Address</label>\r\n     <input type='text' name='email' />\r\n     <br>\r\n     <label for='password'>Password</label>\r\n     <input type='password' name='password' />\r\n     <br>\r\n     <input type='submit'></input>\r\n   </section>\r\n</div>";
+    return "<div class='overlay'></div>\r\n<div class='content'>\r\n   <span class='close'>close</span>\r\n   <section class='join'>\r\n     <h1>Register</h1>\r\n     <div class='error'></div>\r\n     <form>\r\n     <label for='username'>Username</label>\r\n     <input type='text' value=\"user\" name='username' />\r\n     <br>\r\n     <label for='email'>Email Address</label>\r\n     <input type='text' value=\"user\" name='email' />\r\n     <br>\r\n     <label for='password'>Password</label>\r\n     <input type='password' value=\"user\" name='password' />\r\n     <br>\r\n     <input type='submit'></input>\r\n   </section>\r\n</div>";
 },"useData":true});
 
-this["MyTemp"]["app/templates/login"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    return "<div class='overlay'></div>\r\n  <div class='content'>\r\n  <span class='close'>close</span>\r\n  <h2>Login</h2>\r\n  <span class='error'></span>\r\n  <form id='login'>\r\n    <label for='username'>\r\n      Username:\r\n    </label>\r\n    <input name='username' />\r\n    <br>\r\n    <label for='password'>\r\n      Password:\r\n    </label>\r\n    <input type='password' name='password' />\r\n    <br>\r\n    <input type='submit'></input>\r\n  </form>\r\n</div>";
+this["MyTemp"]["app/templates/login"] = Handlebars.template({"1":function(depth0,helpers,partials,data) {
+    var helper;
+
+  return " "
+    + this.escapeExpression(((helper = (helper = helpers.error || (depth0 != null ? depth0.error : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0,{"name":"error","hash":{},"data":data}) : helper)))
+    + " ";
+},"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+    var stack1;
+
+  return "<div class='overlay'></div>\r\n  <div class='content'>\r\n  <span class='close'>close</span>\r\n  <h2>Login</h2>\r\n  <span class='error'>"
+    + ((stack1 = helpers['if'].call(depth0,(depth0 != null ? depth0.error : depth0),{"name":"if","hash":{},"fn":this.program(1, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
+    + "</span>\r\n  <form id='login'>\r\n    <label for='username'>\r\n      Username:\r\n    </label>\r\n    <input name='username' />\r\n    <br>\r\n    <label for='password'>\r\n      Password:\r\n    </label>\r\n    <input type='password' name='password' />\r\n    <br>\r\n    <input type='submit'></input>\r\n  </form>\r\n</div>";
 },"useData":true});
 
 this["MyTemp"]["app/templates/navbar"] = Handlebars.template({"1":function(depth0,helpers,partials,data) {
@@ -640,7 +653,7 @@ var User = require('../models/user');
 var JoinView = ModalView.extend({
     template: Templates["app/templates/join"],
     events: {
-        'submit form': 'registerUser'
+        'submit': 'registerUser'
     },
     render: function() {
         ModalView.prototype.render.call(this);
@@ -650,23 +663,25 @@ var JoinView = ModalView.extend({
     registerUser: function(ev) {
         ev.preventDefault();
         this.user.clear();
-        console.log('register user');
         var username = $('input[name="username"]').val();
         var password = $('input[name="password"]').val();
         var email = $('input[name="email"]').val();
+        var that = this;
         this.user.signup({username: username, password: password, email: email});
     },
     initialize: function() {
         this.user = new User();
+        this.listenTo(this.user, 'all', function(ev) { console.log(ev) });
+        this.listenTo(this.user, 'invalid', this.renderError);
+        this.listenTo(this.user, 'signup:success', this.renderThanks);
         return ModalView.prototype.initialize.call(this);
-        this.listenTo(this.user, 'invalid', 'renderError');
-        this.listenTo(this.user, 'signup:success', 'renderThanks');
     },
     renderError: function(error, options) {
-        var errors = _.map(_.keys(err.validationError), function(key) {
-            return err.validationError[key];
+        var errors = _.map(_.keys(error.validationError), function(key) {
+            return error.validationError[key];
         });
-        this.$error = text(errors);
+        this.$('.error').text(errors);
+        this.$error.addClass('error-active');
     },
     renderThanks: function() {
         this.$el.find('.join').html('thanks for signup');
@@ -763,6 +778,8 @@ var LoginView = ModalView.extend({
         ModalView.prototype.render.call(this);
         this.delegateEvents();
         this.$error = this.$el.find('.error');
+        console.dir(this.session['validationError']);
+        this.$el.find('.error').innerHTML = JSON.stringify(this.session.validationError);
         return this;
     },
     login: function(ev) {
@@ -775,6 +792,7 @@ var LoginView = ModalView.extend({
     initialize: function() {
         this.session = Session.getInstance();
         this.listenTo(this.session, 'login:success', this.closeModal);
+        this.listenTo(this.session, 'invalid', this.render);
         return ModalView.prototype.initialize.call(this);
     }
 });
