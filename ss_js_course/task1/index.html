@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>task #1</title>
+    <!-- I use style in training tasks only, when there are a few lines of css -->
+    <style type="text/css">
+        .close {
+            padding: 2px 7px;
+            color: #fff;
+            background: #b00;
+            font-family: verdana, serif;
+            cursor: pointer;
+            float: right;
+        }
+        .task {
+            padding: 8px;
+            border: 1px dotted #ccc;
+            width: auto;
+        }
+        #main form {
+            width: 40%;
+            margin: 0 30%;
+        }
+        #addTask, #addTaskButton {
+            width: 40%;
+        }
+        #error {
+            display: none;
+        }
+        #error.visible {
+            display: block;
+            text-align: center;
+            border: 1px dashed #e17;
+        }
+    </style>
+</head>
+<body>
+    <div id="main">
+        <form action="">
+            <label for="addTask">Task name</label>
+            <input type="text" name="addTask" id="addTask">
+            <button id="addTaskButton">Add new task</button>
+        </form>
+        <div id="error">Fill in the field</div>
+    </div>
+    <!-- I write js in such style in training tasks only, when there are a few lines of js -->
+    <script type="text/javascript">
+        function addStyledTaskDiv(event) {
+            event.preventDefault();
+            if (fieldContainTheText()) {
+                var fragment = document.createDocumentFragment();
+                var divElement = document.createElement('div');
+                var divContent = document.createTextNode(document.getElementById('addTask').value);
+                divElement.appendChild(divContent);
+                var closingSpan = document.createElement('span');
+                closingSpan.setAttribute('class', 'close');
+                closingSpan.appendChild(document.createTextNode('x'));
+                divElement.appendChild(closingSpan);
+                divElement.setAttribute('class', 'task');
+                fragment.appendChild(divElement);
+                document.getElementById('main').appendChild(fragment);
+                closingSpan.addEventListener('click', removeTask, true);
+                hideErrorMessage();
+                resetInput();
+                setFocus();
+            } else {
+                showErrorMessage();
+            }
+        }
+        function removeTask(event) {
+            event.preventDefault();
+            var nodeToRemove = event.target.parentNode;
+            event.target.parentNode.parentNode.removeChild(nodeToRemove);
+        }
+        function resetInput() {
+            document.getElementById('addTask').value = '';
+        }
+        function setFocus() {
+            document.getElementById('addTask').focus();
+        }
+        function fieldContainTheText() {
+            return document.querySelector('#addTask').value;
+        }
+        function showErrorMessage() {
+            document.querySelector('#error').className = 'visible';
+        }
+        function hideErrorMessage() {
+            document.querySelector('#error').className = '';
+        }
+        document.getElementById('addTaskButton').addEventListener('click', addStyledTaskDiv);
+    </script>
+</body>
+</html>
